@@ -1,21 +1,9 @@
 """
-NVFP4 Block-Scaled Group GEMM for B200 - v7 with dynamic compile
+NVFP4 Block-Scaled Group GEMM for B200 - v8 clean baseline
 """
 
 import torch
 from task import input_t, output_t
-
-# Single GEMM with dynamic shapes support
-@torch.compile(mode="reduce-overhead", dynamic=True)
-def _single_gemm(a_mat, b_mat, scale_a, scale_b):
-    return torch._scaled_mm(
-        a_mat,
-        b_mat,
-        scale_a,
-        scale_b,
-        bias=None,
-        out_dtype=torch.float16,
-    )
 
 
 def custom_kernel(data: input_t) -> output_t:
@@ -32,10 +20,14 @@ def custom_kernel(data: input_t) -> output_t:
         scale_a = sfa_reordered.reshape(-1)
         scale_b = sfb_reordered.reshape(-1)
 
-        a_mat = a[:, :, 0].view(torch.float4_e2m1fn_x2)
-        b_mat = b[:, :, 0].T.view(torch.float4_e2m1fn_x2)
-
-        result = _single_gemm(a_mat, b_mat, scale_a, scale_b)
+        result = torch._scaled_mm(
+            a[:, :, 0].view(torch.float4_e2m1fn_x2),
+            b[:, :, 0].T.view(torch.float4_e2m1fn_x2),
+            scale_a,
+            scale_b,
+            bias=None,
+            out_dtype=torch.float16,
+        )
         c[:, :, 0] = result
         result_tensors.append(c)
 
