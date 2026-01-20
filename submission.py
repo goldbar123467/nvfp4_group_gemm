@@ -1,5 +1,5 @@
 """
-NVFP4 Block-Scaled Group GEMM for NVIDIA B200
+NVFP4 Block-Scaled Group GEMM for B200 - v2
 """
 
 import torch
