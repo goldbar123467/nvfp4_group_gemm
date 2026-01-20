@@ -1,12 +1,5 @@
 """
-Optimized NVFP4 Block-Scaled Group GEMM for NVIDIA B200
-
-This solution targets B200 Tensor Cores with FP4 support.
-Key optimizations:
-1. Leverage B200 FP4 Tensor Core MMA instructions
-2. Efficient scale factor handling with blocked layout
-3. Group GEMM batching for kernel launch overhead reduction
-4. Memory coalescing and shared memory tiling
+NVFP4 Block-Scaled Group GEMM for NVIDIA B200
 """
 
 import torch
