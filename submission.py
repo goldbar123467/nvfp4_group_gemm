@@ -1,5 +1,5 @@
 """
-NVFP4 Block-Scaled Group GEMM for B200 - v8 clean baseline
+NVFP4 Block-Scaled Group GEMM for B200 - v9
 """
 
 import torch
