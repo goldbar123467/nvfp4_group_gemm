@@ -11,10 +11,13 @@ Key optimizations:
 
 import torch
 from task import input_t, output_t
-from utils import ceil_div
 
 # Scaling factor vector size
 sf_vec_size = 16
+
+
+def ceil_div(a, b):
+    return (a + b - 1) // b
 
 
 def to_blocked(input_matrix):
