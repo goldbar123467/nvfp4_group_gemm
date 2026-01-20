@@ -1,5 +1,5 @@
 """
-NVFP4 Block-Scaled Group GEMM for B200 - v4
+NVFP4 Block-Scaled Group GEMM for B200 - v5
 """
 
 import torch
@@ -21,7 +21,7 @@ def custom_kernel(data: input_t) -> output_t:
         scale_a = sfa_reordered.reshape(-1)
         scale_b = sfb_reordered.reshape(-1)
 
-        # Execute scaled matrix multiplication with fast accumulation
+        # Execute scaled matrix multiplication
         result = torch._scaled_mm(
             a[:, :, 0].view(torch.float4_e2m1fn_x2),
             b[:, :, 0].T.view(torch.float4_e2m1fn_x2),
@@ -29,7 +29,6 @@ def custom_kernel(data: input_t) -> output_t:
             scale_b,
             bias=None,
             out_dtype=torch.float16,
-            use_fast_accum=True,
         )
         c[:, :, 0] = result
         result_tensors.append(c)
