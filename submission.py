@@ -22,9 +22,8 @@ def custom_kernel(data: input_t) -> output_t:
         sfa_reordered, sfb_reordered = sfasfb_reordered_tensors[i]
 
         # L=1 always, so access directly without loop
-        # Reshape instead of contiguous+flatten for speed
-        scale_a = sfa_reordered.view(-1)
-        scale_b = sfb_reordered.view(-1)
+        scale_a = sfa_reordered.reshape(-1)
+        scale_b = sfb_reordered.reshape(-1)
 
         # Get matrix slices (L=1, so index 0)
         a_mat = a[:, :, 0].view(torch.float4_e2m1fn_x2)
