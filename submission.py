@@ -1,12 +1,12 @@
 """
-NVFP4 Block-Scaled Group GEMM for B200 - v6 with CUDA graphs
+NVFP4 Block-Scaled Group GEMM for B200 - v7 with dynamic compile
 """
 
 import torch
 from task import input_t, output_t
 
-# Single GEMM operation - will be compiled
-@torch.compile(mode="reduce-overhead")
+# Single GEMM with dynamic shapes support
+@torch.compile(mode="reduce-overhead", dynamic=True)
 def _single_gemm(a_mat, b_mat, scale_a, scale_b):
     return torch._scaled_mm(
         a_mat,
@@ -20,7 +20,7 @@ def _single_gemm(a_mat, b_mat, scale_a, scale_b):
 
 def custom_kernel(data: input_t) -> output_t:
     """
-    Optimized NVFP4 block-scaled group GEMM kernel with torch.compile.
+    Optimized NVFP4 block-scaled group GEMM kernel.
     """
     abc_tensors, _, sfasfb_reordered_tensors, problem_sizes = data
 
